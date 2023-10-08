@@ -1,0 +1,20 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2020",
+    "module": "es2020",
+    "lib": ["es2020", "dom"],
+    "baseUrl": "./",
+    "paths": {
+      "i18n-wrapper": ["libs/i18n-wrapper/src/index.ts"],
+      "typed-transloco": ["libs/typed-transloco/src/index.ts"],
+      "ui-actions": ["libs/ui-actions/src/index.ts"],
+      "ui-layouts": ["libs/ui-layouts/src/index.ts"]
+    }
+  }
+}

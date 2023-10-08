@@ -1,0 +1,12 @@
+{
+  "actions": {
+    "back": "Back",
+    "confirm": "Are you sure?",
+    "new": "New"
+  },
+  "layouts": {
+    "about": "About",
+    "account": "Account",
+    "app_store": "App Store"
+  }
+}

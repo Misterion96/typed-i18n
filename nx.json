@@ -1,0 +1,106 @@
+{
+  "affected": {
+    "defaultBase": "origin/master"
+  },
+  "workspaceLayout": {
+    "libsDir": "libs",
+    "appsDir": "demos"
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "test", "lint"],
+        "parallel": 3
+      }
+    }
+  },
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "generators": {
+    "@nrwl/angular:application": {
+      "style": "scss",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "none"
+    },
+    "@nrwl/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "buildable": true,
+      "publishable": true,
+      "compilationMode": "partial",
+      "changeDetection": "OnPush",
+      "prefix": "noda",
+      "strict": true,
+      "style": "scss"
+    },
+    "@nrwl/angular:component": {
+      "style": "scss"
+    },
+    "@nx/angular:application": {
+      "style": "css",
+      "linter": "eslint",
+      "unitTestRunner": "jest",
+      "e2eTestRunner": "none"
+    },
+    "@nx/angular:library": {
+      "linter": "eslint",
+      "unitTestRunner": "jest"
+    },
+    "@nx/angular:component": {
+      "style": "css"
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        {
+          "target": "build",
+          "projects": "dependencies",
+          "params": "forward"
+        }
+      ],
+      "inputs": ["production", "^production"]
+    },
+    "watch": {
+      "dependsOn": [
+        {
+          "target": "watch",
+          "projects": "dependencies",
+          "params": "ignore"
+        }
+      ]
+    },
+    "test": {
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/jest.preset.js",
+        "{workspaceRoot}/jest.preset.js"
+      ]
+    },
+    "lint": {
+      "inputs": ["default", "{workspaceRoot}/.eslintrc.js"]
+    }
+  },
+  "defaultProject": "demo-additional-fields",
+  "namedInputs": {
+    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "sharedGlobals": [
+      "{workspaceRoot}/yarn.lock",
+      "{workspaceRoot}/tsconfig.*.json",
+      "{workspaceRoot}/tsconfig.base.json"
+    ],
+    "production": [
+      "default",
+      "!{projectRoot}/.eslintrc.js",
+      "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
+      "!{projectRoot}/tsconfig.spec.json",
+      "!{projectRoot}/jest.config.[jt]s",
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/test-setup.[jt]s",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.js"
+    ]
+  }
+}

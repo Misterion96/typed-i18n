@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { TypedTranslocoModule } from 'typed-transloco';
+import { ActionsShowcaseComponent } from 'ui-actions';
+import { LayoutsShowcaseComponent } from 'ui-layouts';
+
 
 import { AppComponent } from './app.component';
 
@@ -8,9 +12,11 @@ import { AppComponent } from './app.component';
     AppComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    ActionsShowcaseComponent,
+    LayoutsShowcaseComponent,
+    TypedTranslocoModule.forRoot()
   ],
-  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
