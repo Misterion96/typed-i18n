@@ -1,18 +1,18 @@
-import { ChangeDetectorRef, Directive, inject, Input, OnChanges, OnDestroy, OnInit } from '@angular/core';
+import { Directive, Input, OnChanges } from '@angular/core';
 import { HashMap, Translation } from '@ngneat/transloco';
-import { Subject, switchMap, takeUntil } from 'rxjs';
-import { TTranslatePath } from '../../types';
 import { ISelectTranslateService } from '../interfaces';
+import { Observable, ReplaySubject, switchMap } from 'rxjs';
+import { TTranslatePath } from '../../types';
 
 @Directive()
 export abstract class AbstractTranslocoComponent<
   i18nDb extends Record<string, Translation>, Lang extends keyof i18nDb = keyof i18nDb,
-> implements OnChanges, OnInit, OnDestroy {
-  private readonly destroySubject$: Subject<void> = new Subject<void>();
-  private readonly updateSubject$: Subject<void> = new Subject<void>();
-  private readonly cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
+> implements OnChanges {
+  private readonly update$: ReplaySubject<void> = new ReplaySubject<void>(1);
 
-  public translation: string = '';
+  public translation$: Observable<string> = this.update$.asObservable().pipe(
+      switchMap(() => this.getCurrentTranslation$())
+  );
 
   @Input()
   public key!: TTranslatePath<i18nDb>
@@ -26,38 +26,22 @@ export abstract class AbstractTranslocoComponent<
   protected constructor(
     protected service: ISelectTranslateService<i18nDb, Lang>
   ) {
-    this.cdr.detach();
   }
 
   public ngOnChanges(): void {
     this.update();
   }
 
-  public ngOnInit(): void {
-    this.initTranslateListener();
-    this.update();
-  }
-
-  public ngOnDestroy(): void {
-    this.destroySubject$.next();
-    this.destroySubject$.complete();
-  }
-
-  private initTranslateListener(): void {
-    this.updateSubject$
-      .asObservable()
-      .pipe(
-          // @ts-ignore
-          switchMap(() => this.service.selectTranslate$(this.key, this.params, this.lang)),
-        takeUntil(this.destroySubject$),
-      )
-      .subscribe(translation => {
-        this.translation = translation;
-        this.cdr.detectChanges();
-      });
-  }
-
   public update(): void {
-    this.updateSubject$.next();
+    this.update$.next();
+  }
+
+  private getCurrentTranslation$(): Observable<string> {
+    return this.service.selectTranslate$(
+        // @ts-expect-error: not be infinite
+        this.key,
+        this.params,
+        this.lang
+    )
   }
 }

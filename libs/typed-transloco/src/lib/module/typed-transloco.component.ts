@@ -8,7 +8,7 @@ import { TypedTranslocoService } from './typed-transloco.service';
   selector: 'typed-transloco-component',
   standalone: true,
   imports: [CommonModule],
-  template: '{{translation}}',
+  template: '{{ translation$ | async }}',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TypedTranslocoComponent extends AbstractTranslocoComponent<typeof TRANSLATE_DB>{
